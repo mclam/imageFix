@@ -24,17 +24,19 @@ public class ImageFix {
             int width = srcImage.getWidth();
             int height = srcImage.getHeight();
 
-            System.out.println(width + "x" + height);
+//            System.out.println(width + "x" + height);
 
             var parts = IntStream.range(0, Integer.parseInt(path.getParentFile().getName())).boxed().collect(Collectors.toList());//Arrays.asList(2, 1, 3);
             Collections.reverse(parts);
 //            System.out.println("parts: " + parts);
 
+            int step = (height - height % parts.size()) / parts.size();
+
             // decompose source image equally
             var images = new ArrayList<BufferedImage>();
             for (var i = 0; i < parts.size(); i++) {
-                BufferedImage subImage = srcImage.getSubimage(0, height * i / parts.size(), width, height / parts.size());
-//            ImageIO.write(subImage, "jpg", new File("00023-" + i + ".jpg"));
+                BufferedImage subImage = srcImage.getSubimage(0, step * i, width, step);
+//                ImageIO.write(subImage, "jpg", new File(path.getPath().replaceAll("\\.jpeg", "-" + i + ".jpg")));
                 images.add(subImage);
             }
 
@@ -42,13 +44,12 @@ public class ImageFix {
             BufferedImage combined = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics graphics = combined.getGraphics();
             for(var i = 0; i < parts.size(); i++) {
-                graphics.drawImage(images.get(parts.get(i)), 0, height * i / parts.size(), null);
+                graphics.drawImage(images.get(parts.get(i)), 0, step * i, null);
             }
             graphics.dispose();
 
             // output combined image
-            File outputFile = new File(path.getPath().replaceAll("\\.jpeg", ".jpg"));
-            ImageIO.write(combined, "jpg", outputFile);
+            ImageIO.write(combined, "jpg", new File(path.getPath().replaceAll("\\.jpeg", ".jpg")));
         }
     }
 
