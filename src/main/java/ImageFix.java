@@ -20,7 +20,7 @@ public class ImageFix {
                 }
             }
         } else {
-            System.out.println("fix " + path.getPath());
+            System.out.println("fix " + path.getCanonicalPath());
             BufferedImage srcImage = ImageIO.read(path);
 
             int width = srcImage.getWidth();
@@ -57,7 +57,7 @@ public class ImageFix {
     }
 
     public static void main(String[] args) throws IOException {
-        String dir = args.length > 0 ? args[0] : "/Users/mclam/git/imageFix/src/main/resources/images";
+        String dir = args.length > 0 ? args[0] : "src/main/resources/images";
         processPath(new File(dir));
     }
 }
