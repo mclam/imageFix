@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,11 +15,12 @@ public class ImageFix {
         if (path.isDirectory()) {
             File[] files = path.listFiles();
             if (files != null && files.length > 0) {
-                for (File file : files) {
+                for (File file : Arrays.stream(files).filter(file -> !file.getName().endsWith(".jpg")).collect(Collectors.toList())) {
                     processPath(file);
                 }
             }
         } else {
+            System.out.println("fix " + path.getPath());
             BufferedImage srcImage = ImageIO.read(path);
 
             int width = srcImage.getWidth();
@@ -49,12 +51,13 @@ public class ImageFix {
             graphics.dispose();
 
             // output combined image
-            ImageIO.write(combined, "jpg", new File(path.getPath().replaceAll("\\.jpeg", ".jpg")));
+            File outputFile = new File(path.getPath().replaceAll("\\.jpeg", ".jpg"));
+            ImageIO.write(combined, "jpg", outputFile);
         }
     }
 
     public static void main(String[] args) throws IOException {
-        String dir = args.length > 0 ? args[0] : "/Users/mclam/git/imageFix/src/main/resources/00023.jpeg";
+        String dir = args.length > 0 ? args[0] : "/Users/mclam/git/imageFix/src/main/resources/images";
         processPath(new File(dir));
     }
 }
