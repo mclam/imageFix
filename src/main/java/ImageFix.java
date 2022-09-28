@@ -51,7 +51,7 @@ public class ImageFix {
             graphics.dispose();
 
             // output combined image
-            File outputFile = new File(path.getPath().replaceAll("\\.jpeg", ".jpg"));
+            File outputFile = new File("src/main/resources/images/fix/" + path.getName().replaceAll("\\.jpeg", ".jpg"));
             ImageIO.write(combined, "jpg", outputFile);
         }
     }
