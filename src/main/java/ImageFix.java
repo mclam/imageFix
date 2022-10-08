@@ -37,7 +37,8 @@ public class ImageFix {
             // decompose source image equally
             var images = new ArrayList<BufferedImage>();
             for (var i = 0; i < parts.size(); i++) {
-                BufferedImage subImage = srcImage.getSubimage(0, step * i, width, step);
+                int h = step + (i == parts.size() - 1 ? height % parts.size() : 0);
+                BufferedImage subImage = srcImage.getSubimage(0, step * i, width, h);
 //                ImageIO.write(subImage, "jpg", new File(path.getPath().replaceAll("\\.jpeg", "-" + i + ".jpg")));
                 images.add(subImage);
             }
@@ -46,7 +47,8 @@ public class ImageFix {
             BufferedImage combined = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics graphics = combined.getGraphics();
             for(var i = 0; i < parts.size(); i++) {
-                graphics.drawImage(images.get(parts.get(i)), 0, step * i, null);
+                int y = step * i + (i > 0 ? height % parts.size() : 0);
+                graphics.drawImage(images.get(parts.get(i)), 0, y, null);
             }
             graphics.dispose();
 
