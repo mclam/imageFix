@@ -15,7 +15,9 @@ public class ImageFix {
         if (path.isDirectory()) {
             File[] files = path.listFiles();
             if (files != null && files.length > 0) {
-                for (File file : Arrays.stream(files).filter(file -> !file.getName().endsWith(".jpg")).collect(Collectors.toList())) {
+                for (File file : Arrays.stream(files).filter(
+                        file -> !file.getName().endsWith(".jpg") && !file.getName().startsWith(".")
+                ).collect(Collectors.toList())) {
                     processPath(file);
                 }
             }
